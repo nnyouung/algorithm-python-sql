@@ -1,0 +1,13 @@
+SELECT s.SUM_SCORE, h.EMP_NO, h.EMP_NAME, h.POSITION, h.EMAIL
+FROM (SELECT EMP_NO, SUM(SCORE) AS SUM_SCORE
+    FROM HR_GRADE
+    WHERE YEAR = 2022
+    GROUP BY EMP_NO) s
+    JOIN HR_EMPLOYEES h ON s.EMP_NO = h.EMP_NO
+WHERE s.SUM_SCORE = (SELECT MAX(SUM_SCORE)
+               FROM(
+                 SELECT SUM(SCORE) AS SUM_SCORE
+                 FROM HR_GRADE
+                 WHERE YEAR = 2022
+                 GROUP BY EMP_NO) ms
+              )
